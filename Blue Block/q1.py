@@ -1,5 +1,5 @@
 #define the Renter Class
-
+import array as arr
 class Renter(object):
   def __init__(self, name, room_number, days_booked):
     self.name = str(name)
@@ -8,6 +8,7 @@ class Renter(object):
 
   def rental_choices(days_booked):
     pass
+
   
 #Class responsible for Short Term Rental Calculation
 class ShortTermRenter(Renter):
@@ -76,32 +77,71 @@ def new_rental(current_room):
 
   return Added
 
+#Helper function to determine the next empty room to assign
+#Will also return a flag if all rooms are full (9)
+def check_next_empty(renters):
+  rentals = len(renters)
+  tmp = 9
+  if(rentals>=8):
+    return 9
+  for number in range(0,8):
+    print(number)
+    if(tmp!=9):
+      return tmp
+    for people in renters:
+      if(int(people.room_number) == number):
+        tmp = 9
+        break
+      else:
+        tmp = int(number)
+    number+=1
+  return tmp
+
 '''
 This function will be to checkout a renter from a room
 @param room, the room which is being checked out of
 '''
-def checkout(room):
-  return
+def checkout(room, renters):
+  if(len(renters)>=8):
+    print("All rooms are booked")
+  else:
+    for i, tenant in enumerate(renters):
+      if(tenant.room_number == room):
+        print(i, " is about to be poped")
+        renters.pop(i)
+        return int(tenant.room_number)
+  return 9
 
 #Driver
 def main():
   #driver function
   init = ''
   renters = []
-  current_room = 1
+  current_room = 0
   while(init!=f'x'):
     print("Make a Selection:\nRent a Room (R), Check Out (C), Print Motel Details (P), Exit Program (X)")
     init = input()
     choice = init.lower()
+    
     if(choice == f'x'):
       break
+
     if(choice == f'r'):
       updated_room = new_rental(current_room)
       renters.insert(current_room, updated_room)
-      current_room+=1
+      current_room = check_next_empty(renters)
+      if(current_room==9):
+        print("All rooms are booked")
+      print(current_room)
     if(choice == f'p'):
       for room in renters:
         room.print_info()
+
+    if(choice == 'c'):
+      room_to_checkout = input()
+      checked_out = checkout(room_to_checkout, renters)
+      if(checked_out!=9):
+        current_room = checked_out
       print("\n")
 
 
