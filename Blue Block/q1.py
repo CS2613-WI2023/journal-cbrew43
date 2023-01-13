@@ -82,10 +82,9 @@ def new_rental(current_room):
 def check_next_empty(renters):
   rentals = len(renters)
   tmp = 9
-  if(rentals>=8):
+  if(rentals>8):
     return 9
-  for number in range(0,8):
-    print(number)
+  for number in range(0,9):
     if(tmp!=9):
       return tmp
     for people in renters:
@@ -102,12 +101,11 @@ This function will be to checkout a renter from a room
 @param room, the room which is being checked out of
 '''
 def checkout(room, renters):
-  if(len(renters)>=8):
+  if(len(renters)>8):
     print("All rooms are booked")
   else:
     for i, tenant in enumerate(renters):
       if(tenant.room_number == room):
-        print(i, " is about to be poped")
         renters.pop(i)
         return int(tenant.room_number)
   return 9
@@ -132,7 +130,7 @@ def main():
       current_room = check_next_empty(renters)
       if(current_room==9):
         print("All rooms are booked")
-      print(current_room)
+        renters.pop()
     if(choice == f'p'):
       for room in renters:
         room.print_info()
